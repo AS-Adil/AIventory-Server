@@ -55,6 +55,14 @@ async function run() {
       res.send(result)
     })
 
+    app.post('/models', async (req, res) =>{
+
+      const newModel = req.body;
+      const result =await modelCollection.insertOne(newModel)
+      res.send(result)
+
+    })
+
 
    
 
