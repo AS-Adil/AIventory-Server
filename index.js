@@ -6,8 +6,8 @@ require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const port = process.env.PORT || 3000;
 
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASS);
+// console.log(process.env.DB_USER);
+// console.log(process.env.DB_PASS);
 
 app.use(cors())
 app.use(express.json())
@@ -33,9 +33,20 @@ async function run() {
     await client.connect();
 
 
+    const db = client.db('model_db')
+    const modelCollection = db.collection('models')
+
+    app.get('/models', async(req,res)=>{
+      const result =await modelCollection.find().toArray()
+      res.send(result)
+    })
+
+   
+
+
 
     app.get('/', (req, res)=>{
-      res.send('hello I am here it is me hmmmm' )
+      res.send([{hello:'hello'},{hi:'hi'}])
     })
 
     await client.db("admin").command({ ping: 1 });
