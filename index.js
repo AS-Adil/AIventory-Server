@@ -35,6 +35,7 @@ async function run() {
 
     const db = client.db('model_db')
     const modelCollection = db.collection('models')
+    const purchasedCollection = db.collection('purchased')
 
     // all models 
     app.get('/models', async(req,res)=>{
@@ -87,6 +88,27 @@ async function run() {
       const result =await modelCollection.find({createdBy:email}).toArray()
       res.send(result)
 
+    })
+
+    app.post('/purchased-models', async (req, res) =>{
+      const model = req.body;
+      const result =await purchasedCollection.insertOne(model)
+      res.send(result)
+
+    })
+
+      app.get('/purchased-models', async(req, res) =>{
+      const email = req.query.email;
+      console.log(email);
+      const result =await purchasedCollection.find({purchasedBy:email}).toArray()
+      res.send(result)
+
+    })
+
+     app.get('/purchased-models/:id',async (req, res) =>{
+      const id = req.params.id
+      const result = await purchasedCollection.findOne({_id :new ObjectId(id)})
+      res.send(result)
     })
 
 
