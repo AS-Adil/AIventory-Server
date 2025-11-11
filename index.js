@@ -69,6 +69,18 @@ async function run() {
       res.send(result)
     })
 
+    app.put('/models/:id', async(req, res) =>{
+      const id = req.params.id;
+      const TheModel = req.body
+      const query = {_id : new ObjectId(id)}
+      const updatedModel = {
+        $set :TheModel
+      }
+      const result = await modelCollection.updateOne(query, updatedModel)
+      res.send(result)
+
+    })
+
 
    
 
