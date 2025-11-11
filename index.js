@@ -81,6 +81,14 @@ async function run() {
 
     })
 
+    app.get('/models-of', async(req, res) =>{
+      const email = req.query.email;
+      console.log(email);
+      const result =await modelCollection.find({createdBy:email}).toArray()
+      res.send(result)
+
+    })
+
 
    
 
