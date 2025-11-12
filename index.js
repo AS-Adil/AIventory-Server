@@ -90,10 +90,23 @@ async function run() {
 
     })
 
-    app.post('/purchased-models', async (req, res) =>{
+    app.post('/purchased-models/:id', async (req, res) =>{
       const model = req.body;
+      const id =req.params.id
       const result =await purchasedCollection.insertOne(model)
       res.send(result)
+
+
+        //downloads counted 
+      const query = {_id: new ObjectId(id)}
+      const update = {
+        $inc: {
+          purchased: 1
+        }
+      }
+      const purchaseCounted = await modelCollection.updateOne(query, update)
+      res.send({result, purchaseCounted})
+
 
     })
 
@@ -108,6 +121,12 @@ async function run() {
      app.get('/purchased-models/:id',async (req, res) =>{
       const id = req.params.id
       const result = await purchasedCollection.findOne({_id :new ObjectId(id)})
+      res.send(result)
+    })
+
+      app.get("/search", async(req, res) => {
+      const search_text = req.query.search
+      const result = await modelCollection.find({name: {$regex: search_text, $options: "i"}}).toArray()
       res.send(result)
     })
 
